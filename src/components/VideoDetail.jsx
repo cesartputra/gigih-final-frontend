@@ -12,7 +12,9 @@ export default function VideoDetail(){
     const [videoData, setVideoData] = useState(null);
     const [commentsData, setCommentsData] = useState([]);
     const [productsData, setProductsData] = useState([]);
-    const [newComment, setNewComment] = useState(null);
+    const [loadingProducts, setLoadingProducts] = useState(true)
+    const [loadingVideo, setLoadingVideo] = useState(true)
+    const [loadingComments, setLoadingComments] = useState(true)
     const [commentText, setCommentText] = useState("");
     const { token, user } = useAuth();
     const baseUrl = 'https://gigih-midterm-backend.onrender.com';
@@ -26,7 +28,9 @@ export default function VideoDetail(){
                     params: { videoId }
                 })
                 setCommentsData(response.data.data.comments)
+                setLoadingComments(false);
             } catch (error) {
+                setLoadingComments(false);
                 console.error('Error fetching comments by video Id: ' + error)
             }
         }
@@ -38,7 +42,9 @@ export default function VideoDetail(){
                 })
 
                 setProductsData(response.data.data.products)
+                setLoadingProducts(false);
             } catch (error) {
+                setLoadingProducts(false);
                 console.error('Error fetching products by video Id: ' + error)
             }
         }
@@ -48,7 +54,9 @@ export default function VideoDetail(){
                 const response = await axios.get(`${baseUrl}/api/videos/${videoId}`)
                 
                 setVideoData(response.data.data.video)
+                setLoadingVideo(false);
             } catch (error) {
+                setLoadingVideo(false);
                 console.error('Error fetch videos data: ' + error)
             }
         }
@@ -93,7 +101,10 @@ export default function VideoDetail(){
             <div className="grid grid-cols-1 md:grid-cols-12 h-screen">
                 <div className="md:col-span-2 flex justify-center">
                     <div className="space-y-4 overflow-y-scroll max-h-[70vh]">
-                            {productsData.length === 0 ? (
+                        {loadingProducts ? (
+                            <span className="loading loading-spinner loading-lg"></span>
+                        ) : (
+                            productsData.length === 0 ? (
                                 <p>No Products</p>
                             ) : (productsData &&
                                     (productsData.map(product => (
@@ -102,50 +113,48 @@ export default function VideoDetail(){
                                             product={product}
                                         />
                                     )))
-                            )}
-                        </div>
+                            )
+                        )}
+                    </div>
                 </div>
                 <div className="md:col-span-7 flex justify-center items-center">
-                    {videoData && (
-                        <div className="videoSectio mx-4 w-screen">
-                            <div className="rounded-lg h-96">
-                                <ReactPlayer
-                                    url={videoData.videoUrl}
-                                    controls={true}
-                                    width="100%"
-                                    height="100%"
-                                />
-                                
+                    {loadingVideo ? (
+                        <span className="loading loading-spinner loading-lg"></span>
+                    ) : (
+                        videoData && (
+                            <div className="videoSectio mx-4 w-screen">
+                                <div className="rounded-lg h-96">
+                                    <ReactPlayer
+                                        url={videoData.videoUrl}
+                                        controls={true}
+                                        width="100%"
+                                        height="100%"
+                                    />
+                                </div>
+                                <h1 className="mt-4 text-xl font-semibold dark:text-white">{videoData.title}</h1>
+                                <div className="rounded-md bg-neutral px-2 py-1 my-2">
+                                    <h2 className="mt-2 text-md font-semibold dark:text-white">{videoData.description}</h2>
+                                </div>
                             </div>
-                            <h1 className="mt-4 text-xl font-semibold dark:text-white">{videoData.title}</h1>
-                            <div className="rounded-md bg-neutral px-2 py-1 my-2">
-                                
-                                <h2 className="mt-2 text-md font-semibold dark:text-white">{videoData.description}</h2>
-                            </div>
-                            
-                        </div>
+                        )
                     )}
-                    
-                    
-                    
                 </div>
                 <div className="md:col-span-3 flex justify-center">
-                    <div className="space-y-4 ">
+                    <div className="space-y-4 w-full">
                         <div className="comments overflow-y-scroll max-h-[70vh]">
-                            {commentsData.length === 0 ? (
-                                <p>No comments</p>
-                            ) : (commentsData &&
-                                    (commentsData.map(comment => (
-                                        <CommentCard
-                                            key={comment._id}
-                                            comment={comment}
-                                            // content={comment.content}
-                                            // userId={comment.userId}
-                                            // username={comment.user.username}
-                                            // userAvatar={comment.user.avatar}
-                                            // createdAt={comment.createdAt}
-                                        />
-                                    )))
+                            {loadingComments ? (
+                                <span className="loading loading-spinner loading-lg"></span>
+                            ) : (
+                                commentsData.length === 0 ? (
+                                    <p>No comments</p>
+                                ) : (commentsData &&
+                                        (commentsData.map(comment => (
+                                            <CommentCard
+                                                key={comment._id}
+                                                comment={comment}
+                                            />
+                                        )))
+                                )
                             )}
                         </div>
                         {user ? (
