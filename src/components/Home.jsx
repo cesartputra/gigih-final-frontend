@@ -5,7 +5,7 @@ import { Link } from 'react-router-dom'
 
 export default function Home() {
     const [videosData, setVideosData] = useState([])
-    const baseUrl = 'http://localhost:3000'
+    const baseUrl = 'https://gigih-midterm-backend.onrender.com';
 
     useEffect(() => {
         const fetchVideos = async () => {

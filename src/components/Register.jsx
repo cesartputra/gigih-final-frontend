@@ -27,7 +27,7 @@ export default function Register() {
         setShowCheckPassword(!showCheckPassword);
     };
 
-    const baseUrl = 'http://localhost:3000';
+    const baseUrl = 'https://gigih-midterm-backend.onrender.com';
 
     const handleSubmit = async (e) => {
         e.preventDefault();

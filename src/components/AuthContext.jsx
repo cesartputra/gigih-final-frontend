@@ -10,7 +10,7 @@ export function useAuth() {
 export function AuthProvider({ children }) {
     const [user, setUser] = useState(JSON.parse(sessionStorage.getItem('user')));
     const [token, setToken] = useState(sessionStorage.getItem('token'));
-    const baseUrl = 'http://localhost:3000';
+    const baseUrl = 'https://gigih-midterm-backend.onrender.com';
     
     const login = async (userData) => {
         try {

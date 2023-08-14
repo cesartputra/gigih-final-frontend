@@ -15,7 +15,7 @@ export default function VideoDetail(){
     const [newComment, setNewComment] = useState(null);
     const [commentText, setCommentText] = useState("");
     const { token, user } = useAuth();
-    const baseUrl = 'http://localhost:3000';
+    const baseUrl = 'https://gigih-midterm-backend.onrender.com';
     
     
     
